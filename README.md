@@ -15,6 +15,11 @@ to do, with the command to copy.
 
 ## Install
 
+**From SekaiPop:** Settings > About / Update > Get plugins, search "tailscale", Install, then
+Turn its bar entry on. Updates show up in About / Update > Plugins.
+
+**From the clone** (to work on it; SekaiPop then lists it as managed by you and never updates it):
+
 ```sh
 git clone https://github.com/masshirodev/sekaipop-tailscale.git ~/projects/sekaipop-tailscale
 cd ~/projects/sekaipop-tailscale && ./install.sh
