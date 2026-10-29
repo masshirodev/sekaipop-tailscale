@@ -1,0 +1,64 @@
+{
+    "id": "tailscale",
+    "name": "Tailscale",
+    "version": "1.0.0",
+    "api": 1,
+    "description": "Whether this machine is on your tailnet, how many devices are up, and every device with its state.",
+    "icon": "hub",
+    "bar": { "label": "Tailscale", "icon": "hub" },
+    "settings": {
+        "barLook": "count",
+        "hideWhenMissing": true,
+        "count": "all",
+        "offline": "fold",
+        "order": "online",
+        "look": "full",
+        "checkSeconds": 5
+    },
+    "settingsInfo": {
+        "barLook": {
+            "label": "Bar entry",
+            "description": "What the entry shows next to its icon.",
+            "group": "Bar",
+            "choices": [{ "value": "count", "label": "Icon and count" }, { "value": "icon", "label": "Icon only" }]
+        },
+        "hideWhenMissing": {
+            "label": "Hide without Tailscale",
+            "description": "Take the entry off the bar when the tailscale command isn't installed.",
+            "group": "Bar"
+        },
+        "count": {
+            "label": "Count",
+            "description": "Which devices \"5/6\" counts.",
+            "group": "Devices",
+            "choices": [{ "value": "all", "label": "All devices" }, { "value": "mine", "label": "Only mine" }]
+        },
+        "offline": {
+            "label": "Offline devices",
+            "description": "Fold tucks them under one line at the end.",
+            "group": "Devices",
+            "choices": [{ "value": "show", "label": "Show" }, { "value": "fold", "label": "Fold" }, { "value": "hide", "label": "Hide" }]
+        },
+        "order": {
+            "label": "Order",
+            "description": "This machine is always on top.",
+            "group": "Devices",
+            "choices": [{ "value": "online", "label": "Online first" }, { "value": "name", "label": "By name" }, { "value": "lastseen", "label": "Last seen" }]
+        },
+        "look": {
+            "label": "Look",
+            "description": "Compact: the count and a row of dots.",
+            "group": "Widget",
+            "choices": [{ "value": "full", "label": "Full" }, { "value": "compact", "label": "Compact" }]
+        },
+        "checkSeconds": {
+            "label": "Check every",
+            "description": "While the popup or the widget is showing. The bar alone checks every 30 seconds.",
+            "group": "Checking",
+            "min": 2,
+            "max": 60,
+            "unit": "seconds"
+        }
+    },
+    "groups": ["Bar", "Devices", "Widget", "Checking"]
+}
