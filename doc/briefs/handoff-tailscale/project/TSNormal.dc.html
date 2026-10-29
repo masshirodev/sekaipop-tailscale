@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale popup under its entry</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;family=Google+Sans+Code:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+.cap{font-size:13px;font-weight:700;color:#555473}
+</style>
+</helmet>
+<div style="position: relative; width: 1320px; height: 860px; box-sizing: border-box; padding: 30px 40px; background: linear-gradient(160deg, #e9f3f6, #d4d7ec); font-family: 'Google Sans Flex', 'Google Sans', 'Nunito', system-ui, sans-serif">
+<dc-import name="TSStrip" mode="light" state="attn" open="{{ true }}" hint-size="1240px,95px"></dc-import>
+<div style="position: absolute; left: 738px; top: 126px">
+<dc-import name="TSPopup" state="normal" mode="light" hint-size="360px,600px"></dc-import>
+</div>
+<div style="position: absolute; left: 60px; top: 150px; display: flex; flex-direction: column; gap: 12px; width: 380px">
+<span class="cap">Hovering a row: its IP key just copied it (the most common thing to do here). Clicking anywhere on the row copies the IP too; DNS copies the MagicDNS name.</span>
+<div style="padding: 18px; border-radius: 18px; background: #111019">
+<dc-import name="TSPopup" state="hover" mode="darker" hint-size="360px,600px"></dc-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":860}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

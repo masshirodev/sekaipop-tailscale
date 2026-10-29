@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale desktop widget and its shelf tile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+.lab{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.shelf{display:flex;gap:18px;align-items:flex-end;padding:22px 26px 18px;border:3px solid #b8b7c4;border-radius:13px;background:#ffffff;box-shadow:inset 0 0 0 7px #d9d9d9,0 4px 0 #ccccd5}
+.slot{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pic{width:112px;height:96px;border:3px solid #555473;border-radius:14px;background:#f3fbf9;box-shadow:0 4px 0 #555473;display:grid;place-items:center;overflow:hidden}
+.nt{height:24px;padding:0 10px;display:flex;align-items:center;gap:5px;border:2.5px solid #555473;border-radius:8px;background:#ffffff;font-size:11px;font-weight:800;color:#555473;letter-spacing:.06em}
+.nt svg{width:12px;height:12px}
+.bd{position:absolute;right:-8px;top:-8px;width:26px;height:26px;border-radius:13px;border:2.5px solid #555473;background:#ffffff;display:grid;place-items:center;color:#555473}
+.bd svg{width:14px;height:14px}
+.mini{width:84px;padding:6px;border:2px solid #b8b7c4;border-radius:7px;background:#fff;display:flex;flex-direction:column;gap:3px}
+.mini i{display:flex;align-items:center;gap:4px;height:9px}
+.mini i b{width:6px;height:6px;border-radius:50%;background:#00ffcb;border:1.5px solid #555473}
+.mini i s{flex:1;height:4px;border-radius:2px;background:#e4e4ec}
+</style>
+</helmet>
+<div style="position: relative; width: 1420px; height: 860px; box-sizing: border-box; padding: 40px; background: radial-gradient(circle at 20% 25%, #cdf3ee 0, transparent 42%), radial-gradient(circle at 80% 30%, #ddd8ff 0, transparent 40%), linear-gradient(150deg, #eaf5f7, #c9cde6); font-family: 'Google Sans Flex', 'Google Sans', 'Nunito', system-ui, sans-serif; color: #555473">
+<div style="display: flex; gap: 36px; align-items: flex-start">
+<div style="display: flex; flex-direction: column; gap: 10px"><span class="lab">Full (default), Light</span><dc-import name="TSCard" look="full" mode="light" hint-size="380px,380px"></dc-import></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><span class="lab">Compact</span><dc-import name="TSCard" look="compact" mode="light" hint-size="190px,190px"></dc-import></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #111019; color: #e4e4ecaa"><span class="lab">Darker</span><dc-import name="TSCard" look="full" mode="darker" hint-size="380px,380px"></dc-import></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #111019; color: #e4e4ecaa"><span class="lab">Matugen</span><dc-import name="TSCard" look="compact" mode="darker" group="matugen" hint-size="190px,190px"></dc-import></div>
+</div>
+
+<div style="position: absolute; left: 40px; top: 560px; display: flex; flex-direction: column; gap: 10px">
+<span class="lab">Edit Desktop shelf: plugin tiles come after the built-in widgets</span>
+<div class="shelf">
+<div class="slot"><span class="pic" style="font-size: 30px; font-weight: 800">01:05</span><span class="nt">CLOCK</span><span class="bd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div>
+<div class="slot"><span class="pic" style="font-size: 24px; font-weight: 800">28°C</span><span class="nt">WEATHER</span><span class="bd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div>
+<div class="slot"><span class="pic" style="font-size: 13px; font-weight: 800">To-Do</span><span class="nt">TO-DO</span><span class="bd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg></span></div>
+<span style="width: 2px; height: 110px; background: #e4e4ec; margin: 0 4px" aria-hidden="true"></span>
+<button class="slot" style="border: 0; background: none; padding: 0; font: inherit; cursor: pointer" aria-label="Add Tailscale to the desktop">
+<span class="pic"><span class="mini" aria-hidden="true"><i><b></b><s></s></i><i><b></b><s></s></i><i><b></b><s></s></i><i><b style="background: transparent"></b><s></s></i></span></span>
+<span class="nt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4z"></path></svg>TAILSCALE</span>
+<span class="bd" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg></span>
+</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1420,"height":860}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

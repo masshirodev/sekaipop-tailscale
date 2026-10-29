@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale popup: this machine off the tailnet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;family=Google+Sans+Code:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+.lab{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#555473aa}
+.col{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+</style>
+</helmet>
+<div style="width: 1720px; height: 560px; box-sizing: border-box; padding: 40px; background: #eef0f4; font-family: 'Google Sans Flex', 'Google Sans', 'Nunito', system-ui, sans-serif; display: flex; gap: 36px; align-items: flex-start">
+<div class="col"><span class="lab">Tailscale off (Light)</span><dc-import name="TSEntry" state="stopped" open="{{ true }}" hint-size="80px,44px"></dc-import><dc-import name="TSPopup" state="stopped" mode="light" hint-size="360px,330px"></dc-import></div>
+<div class="col"><span class="lab">Signed out (Darker)</span><div style="padding: 16px; border-radius: 18px; background: #111019; display: flex; flex-direction: column; gap: 10px; align-items: flex-start"><dc-import name="TSEntry" state="login" mode="darker" open="{{ true }}" hint-size="100px,44px"></dc-import><dc-import name="TSPopup" state="login" mode="darker" hint-size="360px,300px"></dc-import></div></div>
+<div class="col"><span class="lab">No tailscaled (Dark)</span><div style="padding: 16px; border-radius: 18px; background: #232235; display: flex; flex-direction: column; gap: 10px; align-items: flex-start"><dc-import name="TSEntry" state="nodaemon" mode="dark" open="{{ true }}" hint-size="60px,44px"></dc-import><dc-import name="TSPopup" state="nodaemon" mode="dark" hint-size="360px,300px"></dc-import></div></div>
+<div class="col"><span class="lab">Connecting (Light)</span><dc-import name="TSEntry" state="starting" open="{{ true }}" hint-size="80px,44px"></dc-import><dc-import name="TSPopup" state="starting" mode="light" hint-size="360px,330px"></dc-import></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1720,"height":560}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

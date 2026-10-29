@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale in Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;family=Google+Sans+Code:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+.sk{font-family:'Google Sans Flex','Google Sans','Nunito',system-ui,sans-serif;color:#e4e4ec;-webkit-font-smoothing:antialiased}
+.sk *{box-sizing:border-box}
+.sk button{font:inherit;color:inherit;padding:0}
+.sk code{font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px}
+.lab{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#e4e4ecaa}
+.card{position:relative;background:#191826;border:3px solid #3f3e55;border-radius:30px;box-shadow:5px 4px 0 #2f2f40;padding:46px 26px 26px}
+.plate{position:absolute;left:34px;top:-22px;height:44px;display:flex;align-items:center;gap:14px;padding:0 38px 0 18px;border:3px solid #3f3e55;border-radius:15px;box-shadow:3px 3px 0 #2f2f40;color:#555473;font-weight:800;font-size:21px}
+.dia{width:28px;height:28px;display:grid;place-items:center;border-radius:8px;background:#fff;border:2.5px solid #3f3e55;transform:rotate(45deg);flex:none}
+.dia svg{width:17px;height:17px;transform:rotate(-45deg);color:#555473}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tile{position:relative;height:70px;display:flex;align-items:center;gap:16px;padding:0 18px;border:3px solid #3f3e55;border-radius:26px;background:#191826;box-shadow:inset 0 0 0 4px #32314c,4px 3px 0 #2f2f40;text-align:left;cursor:pointer}
+.tile.on{border-width:4px;background:linear-gradient(90deg,#00ffcb,#04feee);box-shadow:inset 0 0 0 5px #32314c,6px 4px 0 #2f2f40;color:#555473}
+.tile b{display:block;font-size:18px;font-weight:800}
+.tile small{display:block;font-size:12px;font-weight:800;letter-spacing:.08em;opacity:.8}
+.tile .dia{background:#fff}
+.plug{position:absolute;right:-9px;top:-11px;height:30px;display:flex;align-items:center;gap:5px;padding:0 10px;border-radius:15px;border:2.5px solid #3f3e55;background:#191826;color:#e4e4ec;font-size:11.5px;font-weight:800;box-shadow:0 3px 0 #2f2f40;cursor:pointer}
+.plug svg{width:13px;height:13px}
+.ed{border:4px solid #3f3e55;border-radius:24px;background:#191826;box-shadow:5px 4px 0 #2f2f40;overflow:hidden}
+.edh{display:flex;align-items:center;gap:14px;padding:14px 18px 14px 24px;background:linear-gradient(90deg,#00ffcb,#04feee);box-shadow:inset 0 0 0 5px #32314c;color:#555473}
+.edh b{font-size:21px;font-weight:800}
+.ver{height:24px;padding:0 9px;display:inline-flex;align-items:center;border-radius:8px;background:rgba(255,255,255,.6);border:2px solid #555473;font-size:12px;font-weight:800}
+.edb{padding:18px 28px 24px;display:flex;flex-direction:column;gap:4px}
+.meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:14px;border-bottom:2.5px dashed #2c2a42;font-size:14px;font-weight:700;color:#e4e4ecaa}
+.st{height:30px;display:inline-flex;align-items:center;gap:6px;padding:0 11px;border:2.5px solid #3f3e55;border-radius:10px;font-size:13px;font-weight:800;color:#e4e4ec}
+.st.on{background:linear-gradient(90deg,#00ffcb,#04feee);color:#555473;border-color:#555473}
+.grp{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#e4e4ecaa;padding:16px 0 2px}
+.sr{display:grid;grid-template-columns:300px minmax(0,1fr);align-items:center;column-gap:20px;min-height:68px;padding:4px 0}
+.sl b{display:block;font-size:17px;font-weight:800}
+.sl small{display:block;font-size:13px;font-weight:600;color:#e4e4ecaa}
+.chips{display:flex;gap:12px;flex-wrap:wrap}
+.chip{height:44px;display:inline-flex;align-items:center;padding:0 20px;border:3px solid #3f3e55;border-radius:17px;background:#191826;box-shadow:4px 3px 0 #2f2f40;font-weight:800;font-size:16px;cursor:pointer}
+.chip.on{border-width:4px;background:linear-gradient(90deg,#00ffcb,#04feee);box-shadow:inset 0 0 0 5px #32314c,5px 4px 0 #2f2f40;color:#555473}
+.slw{display:flex;align-items:center;gap:14px;max-width:560px}
+.trk{position:relative;flex:1;height:18px;border:3px solid #3f3e55;border-radius:6px;background:#222133;transform:skewX(-14deg)}
+.trk .fill{position:absolute;left:0;top:0;bottom:0;width:5%;background:linear-gradient(90deg,#00ffcb,#04feee)}
+.trk .knob{position:absolute;left:5%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;transform:skewX(14deg) rotate(45deg);border-radius:6px;background:#191826;border:3px solid #3f3e55}
+.vb{height:34px;padding:0 12px;display:inline-flex;align-items:center;border:3px solid #555473;border-radius:10px;background:linear-gradient(90deg,#00ffcb,#04feee);color:#555473;font-size:14px;font-weight:800;white-space:nowrap}
+.rng{font-size:12px;font-weight:700;color:#e4e4ecaa}
+.tgl{width:150px;height:56px;display:flex;align-items:center;gap:14px;padding:0 16px;border:4px solid #555473;border-radius:18px;background:linear-gradient(90deg,#00ffcb,#04feee);color:#555473;font-size:13px;font-weight:800;letter-spacing:.08em;cursor:pointer}
+</style>
+</helmet>
+<div class="sk" style="width: 1280px; height: 1420px; box-sizing: border-box; padding: 40px; background: #10101a; border-radius: 28px; display: flex; flex-direction: column; gap: 22px">
+<span class="lab">Settings › Bar › Modules: the entry is one more module, marked as a plugin</span>
+<section class="card" style="margin-top: 16px">
+<div class="plate" style="background: #8ee3ef"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4z"></path></svg></span>Modules</div>
+<div class="tiles">
+<button class="tile on"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"></path></svg></span><span><b>Weather</b><small>ON</small></span></button>
+<button class="tile on"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v5H4zM17 14h3v5h-3z"></path></svg></span><span><b>Discord call</b><small>ON</small></span></button>
+<button class="tile"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg></span><span><b>Updates</b><small>OFF</small></span></button>
+<button class="tile on"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg></span><span><b>Clock</b><small>ON</small></span></button>
+<div style="position: relative">
+<button class="tile on" style="width: 100%"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2.6"></circle><circle cx="12" cy="4" r="1.7"></circle><circle cx="19" cy="8" r="1.7"></circle><circle cx="19" cy="16" r="1.7"></circle><circle cx="12" cy="20" r="1.7"></circle><circle cx="5" cy="16" r="1.7"></circle><circle cx="5" cy="8" r="1.7"></circle><path d="M12 9.4V5.7M14.3 10.7l3.2-1.8M14.3 13.3l3.2 1.8M12 14.6v3.7M9.7 13.3l-3.2 1.8M9.7 10.7L6.5 8.9"></path></svg></span><span><b>Tailscale</b><small>ON · PLUGIN</small></span></button>
+<button class="plug" aria-label="Tailscale's plugin settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4z"></path></svg>Settings</button>
+</div>
+<button class="tile on"><span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"></path></svg></span><span><b>Wi-Fi, Bluetooth &amp; sound</b><small>ON</small></span></button>
+</div>
+</section>
+
+<span class="lab" style="margin-top: 22px">Settings › Desktop › Plugins: one plugin, one form, for the bar entry and the widget alike</span>
+<div class="ed" role="region" aria-label="Tailscale settings">
+<div class="edh">
+<span class="dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2.6"></circle><circle cx="12" cy="4" r="1.7"></circle><circle cx="19" cy="8" r="1.7"></circle><circle cx="19" cy="16" r="1.7"></circle><circle cx="12" cy="20" r="1.7"></circle><circle cx="5" cy="16" r="1.7"></circle><circle cx="5" cy="8" r="1.7"></circle><path d="M12 9.4V5.7M14.3 10.7l3.2-1.8M14.3 13.3l3.2 1.8M12 14.6v3.7M9.7 13.3l-3.2 1.8M9.7 10.7L6.5 8.9"></path></svg></span>
+<b>Tailscale</b><span class="ver">1.0.0</span><code>tailscale</code>
+</div>
+<div class="edb">
+<div class="meta"><span class="st on">In the bar</span><span class="st on">On the desktop</span><span class="st">DP-1</span><span style="flex: 1"></span><span>Uses <code>tailscale</code> from your PATH · no secrets</span></div>
+<div class="grp">Bar</div>
+<div class="sr"><div class="sl"><b>Bar entry</b><small>What the entry shows next to its icon.</small></div><div class="chips"><button class="chip on">Icon and count</button><button class="chip">Icon only</button></div></div>
+<div class="sr"><div class="sl"><b>Hide without Tailscale</b><small>Take the entry off the bar when the tailscale command isn't installed.</small></div><div><button class="tgl" role="switch" aria-checked="true">ON</button></div></div>
+<div class="grp">Devices</div>
+<div class="sr"><div class="sl"><b>Count</b><small>Which devices "5/6" counts.</small></div><div class="chips"><button class="chip on">All devices</button><button class="chip">Only mine</button></div></div>
+<div class="sr"><div class="sl"><b>Offline devices</b><small>Fold tucks them under one line at the end.</small></div><div class="chips"><button class="chip">Show</button><button class="chip on">Fold</button><button class="chip">Hide</button></div></div>
+<div class="sr"><div class="sl"><b>Order</b><small>This machine is always on top.</small></div><div class="chips"><button class="chip on">Online first</button><button class="chip">By name</button><button class="chip">Last seen</button></div></div>
+<div class="grp">Widget</div>
+<div class="sr"><div class="sl"><b>Look</b><small>Compact: the count and a row of dots.</small></div><div class="chips"><button class="chip on">Full</button><button class="chip">Compact</button></div></div>
+<div class="grp">Checking</div>
+<div class="sr"><div class="sl"><b>Check every</b><small>While the popup or the widget is showing. The bar alone checks every 30 seconds.</small></div><div class="slw"><span class="rng">2</span><div class="trk" role="slider" aria-label="Check every" aria-valuenow="5"><span class="fill"></span><span class="knob"></span></div><span class="rng">60</span><span class="vb">5 seconds</span></div></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1420}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale popup: big tailnet, all up, tailnet of one</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;family=Google+Sans+Code:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+.lab{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#555473aa}
+.col{display:flex;flex-direction:column;gap:12px}
+</style>
+</helmet>
+<div style="width: 1360px; height: 880px; box-sizing: border-box; padding: 40px; background: #eef0f4; font-family: 'Google Sans Flex', 'Google Sans', 'Nunito', system-ui, sans-serif; display: flex; gap: 40px; align-items: flex-start">
+<div class="col"><span class="lab">25 devices (Dark): grows to 9 rows, then scrolls</span><div style="padding: 18px; border-radius: 18px; background: #232235"><dc-import name="TSPopup" state="big" mode="dark" hint-size="360px,760px"></dc-import></div></div>
+<div class="col"><span class="lab">Everything up (Light)</span><dc-import name="TSPopup" state="allup" mode="light" hint-size="360px,600px"></dc-import></div>
+<div class="col"><span class="lab">Only this machine (Darker)</span><div style="padding: 18px; border-radius: 18px; background: #111019"><dc-import name="TSPopup" state="alone" mode="darker" hint-size="360px,360px"></dc-import></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":880}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

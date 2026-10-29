@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale bar entry</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+.te{display:inline-flex;font-family:'Google Sans Flex','Google Sans','Nunito',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:2px 2px 6px}
+.te *{box-sizing:border-box}
+.pill{position:relative;height:36px;display:inline-flex;align-items:center;gap:7px;padding:0 14px 0 12px;border:3px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer}
+.pill.v{width:52px;height:auto;flex-direction:column;gap:2px;padding:9px 0 8px;border-radius:18px}
+.pill.open{transform:translateY(4px)}
+.ic{position:relative;width:18px;height:18px;flex:none}
+.ic svg{width:18px;height:18px;display:block}
+.ic.dim{color:var(--inkSub)}
+.slash{position:absolute;left:-2px;top:8px;width:22px;height:2.5px;border-radius:2px;background:var(--ink);transform:rotate(-45deg)}
+.wd{position:absolute;right:-4px;top:-4px;width:9px;height:9px;transform:rotate(45deg);border-radius:2px;background:var(--warnFill);border:1.5px solid var(--colBorder)}
+.sd{position:absolute;right:-4px;bottom:-3px;width:9px;height:9px;border-radius:50%}
+.sd.on{background:var(--accentMint);border:2px solid var(--colBorder)}
+.sd.off{background:var(--surface);border:2px solid var(--ink)}
+.tx{font-variant-numeric:tabular-nums}
+.tx.dim{color:var(--inkSub)}
+.dots i{display:inline-block;width:3px;height:3px;margin:0 1px;border-radius:50%;background:var(--ink);animation:blink 1.2s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{50%{opacity:.2}}
+</style>
+</helmet>
+<div class="te" style="{{vars}}">
+<button class="pill {{cls}}" aria-label="{{label}}" style="box-shadow: {{shadow}}">
+<span class="ic {{icCls}}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="2.6"></circle><circle cx="12" cy="4" r="1.7"></circle><circle cx="19" cy="8" r="1.7"></circle><circle cx="19" cy="16" r="1.7"></circle><circle cx="12" cy="20" r="1.7"></circle><circle cx="5" cy="16" r="1.7"></circle><circle cx="5" cy="8" r="1.7"></circle><path d="M12 9.4V5.7M14.3 10.7l3.2-1.8M14.3 13.3l3.2 1.8M12 14.6v3.7M9.7 13.3l-3.2 1.8M9.7 10.7L6.5 8.9"></path></svg><sc-if value="{{slash}}" hint-placeholder-val="{{ false }}"><span class="slash"></span></sc-if><sc-if value="{{warn}}" hint-placeholder-val="{{ false }}"><span class="wd"></span></sc-if><sc-if value="{{sdot}}" hint-placeholder-val="{{ false }}"><span class="sd {{sdCls}}"></span></sc-if></span>
+<sc-if value="{{hasText}}" hint-placeholder-val="{{ true }}"><span class="tx {{txCls}}">{{text}}</span></sc-if>
+<sc-if value="{{starting}}" hint-placeholder-val="{{ false }}"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></sc-if>
+</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"state":{"editor":"enum","options":["running","attn","allup","stopped","login","starting","nodaemon"],"default":"running","section":"State"},"look":{"editor":"enum","options":["count","icon"],"default":"count","section":"State"},"vertical":{"editor":"boolean","default":false,"section":"State"},"open":{"editor":"boolean","default":false,"section":"State"},"mode":{"editor":"enum","options":["light","dark","darker"],"default":"light","section":"Theme"},"group":{"editor":"enum","options":["vs","nightcord","mmj","matugen"],"default":"vs","section":"Theme"},"$preview":{"width":120,"height":70}}'>
+class Component extends DCLogic {
+  roles(group, mode) {
+    const G = {
+      vs: { border: '#555473', A: '#04feee', B: '#00ffcb', deep: '#232235', divider: '#e4e4ec' },
+      nightcord: { border: '#43285f', A: '#c08cf2', B: '#e2b5ff', deep: '#2b1a3d', divider: '#e8dff1' },
+      mmj: { border: '#39662d', A: '#a4ee55', B: '#7fe9a8', deep: '#223c1b', divider: '#e3f1df' },
+      matugen: { border: '#7d1d4f', A: '#ffb0cf', B: '#ffb68e', deep: '#4a0e2c', divider: '#f4dde5' }
+    };
+    const p = G[group] || G.vs;
+    const h = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+    const x = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+    const mix = (a, b, t) => { const A = h(a), B = h(b); return x(A.map((v, i) => v * (1 - t) + B[i] * t)); };
+    const dk = (c, f) => x(h(c).map(v => v / f));
+    const lt = (c, f) => x(h(c).map(v => v * f));
+    const W = '#ffffff';
+    let t;
+    if (mode === 'darker') {
+      const s = dk(p.deep, 1.4);
+      t = { surface: s, ringWhite: lt(s, 2), line: dk(p.border, 1.35), lineShadow: dk(p.border, 1.8), ink: p.divider };
+    } else if (mode === 'dark') {
+      const s = lt(p.deep, 1.18);
+      t = { surface: s, ringWhite: mix(W, p.border, 0.08), line: p.border, lineShadow: dk(p.border, 1.3), ink: p.divider };
+    } else {
+      t = { surface: W, ringWhite: W, line: mix(W, p.border, 0.42), lineShadow: mix(W, p.border, 0.30), ink: p.border };
+    }
+    t.inkSub = t.ink + 'aa';
+    Object.assign(t, { accentCyan: p.A, accentMint: p.B, colBorder: p.border, warnFill: '#ffb74d' });
+    return Object.keys(t).map(k => '--' + k + ': ' + t[k]).join('; ');
+  }
+  renderVals() {
+    const s = this.props.state ?? 'running';
+    const iconOnly = (this.props.look ?? 'count') === 'icon';
+    const v = this.props.vertical ?? false;
+    const open = this.props.open ?? false;
+    const txt = { running: '5/6', attn: '5/6', allup: '6/6', stopped: 'Off', login: 'Sign in', starting: '', nodaemon: '' }[s];
+    const label = {
+      running: 'Tailscale: on, 5 of 6 devices online', attn: 'Tailscale: on, 5 of 6 online, a device needs attention', allup: 'Tailscale: on, all 6 devices online',
+      stopped: 'Tailscale is off', login: 'Tailscale: signed out, sign in', starting: 'Tailscale: connecting', nodaemon: "Tailscale: tailscaled isn't running"
+    }[s];
+    const offState = s === 'stopped' || s === 'nodaemon' || s === 'login';
+    return {
+      vars: this.roles(this.props.group ?? 'vs', this.props.mode ?? 'light'),
+      cls: (v ? 'v' : '') + (open ? ' open' : ''),
+      shadow: open ? 'inset 0 0 0 5px var(--ringWhite)' : 'inset 0 0 0 5px var(--ringWhite), 0 4px 0 var(--lineShadow)',
+      label: label,
+      icCls: s === 'stopped' || s === 'nodaemon' ? 'dim' : '',
+      slash: s === 'nodaemon',
+      warn: s === 'attn',
+      sdot: iconOnly && s !== 'nodaemon' && s !== 'starting',
+      sdCls: offState ? 'off' : 'on',
+      hasText: !iconOnly && txt !== '',
+      text: v && s === 'stopped' ? 'off' : txt,
+      txCls: s === 'stopped' ? 'dim' : '',
+      starting: s === 'starting' && !iconOnly
+    };
+  }
+}
+</script>
+</body>
+</html>

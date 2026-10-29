@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale popup</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;family=Google+Sans+Code:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+.tp{font-family:'Google Sans Flex','Google Sans','Nunito',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.tp *{box-sizing:border-box}
+.tp button{font:inherit;color:inherit;padding:0}
+.tp code{font-family:'Google Sans Code',ui-monospace,monospace}
+.card{width:360px;border:3px solid var(--line);border-radius:13px;background:var(--surface);overflow:hidden}
+.hd{display:flex;align-items:center;gap:12px;padding:14px 14px 12px 16px}
+.dia{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:var(--chipFill);border:2.5px solid var(--line);transform:rotate(45deg);flex:none;color:var(--chipInk)}
+.dia svg{width:17px;height:17px;transform:rotate(-45deg)}
+.hd b{display:block;font-size:17px;font-weight:800;line-height:1.15}
+.hd small{display:block;font-size:12px;font-weight:600;color:var(--inkSub)}
+.st{margin-left:auto;height:28px;display:inline-flex;align-items:center;gap:6px;padding:0 11px;border:2.5px solid var(--line);border-radius:14px;background:var(--surface);font-size:12px;font-weight:800;white-space:nowrap;flex:none}
+.st.on{background:linear-gradient(90deg,var(--accentMint),var(--accentCyan));border-color:var(--colBorder);color:var(--colBorder);box-shadow:inset 0 0 0 2px var(--ringWhite)}
+.st i{width:9px;height:9px;border-radius:50%;flex:none}
+.st.on i{background:var(--colBorder)}
+.st.off i{border:2px solid var(--inkSub)}
+.me{margin:0 12px;padding:10px 12px;border-radius:12px;background:var(--surfaceHover);display:flex;flex-direction:column;gap:6px}
+.me .t{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800}
+.me .tag{height:20px;padding:0 7px;display:inline-flex;align-items:center;border-radius:6px;background:var(--surface);border:2px solid var(--line);font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--inkSub);text-transform:uppercase}
+.cp{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600}
+.cp code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck{width:28px;height:28px;flex:none;display:grid;place-items:center;border-radius:9px;border:2.5px solid var(--line);background:var(--surface);box-shadow:0 3px 0 var(--lineShadow);cursor:pointer;color:var(--ink)}
+.ck svg{width:14px;height:14px}
+.sec{display:flex;align-items:center;gap:8px;padding:14px 16px 6px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--inkSub)}
+.sec b{color:var(--ink);font-weight:800}
+.list{position:relative;overflow:hidden;padding:0 6px}
+.row{display:flex;align-items:center;gap:10px;min-height:46px;padding:5px 10px;border-radius:10px;width:100%;border:0;background:transparent;text-align:left;cursor:pointer}
+.row.hov{background:var(--surfaceHover)}
+.dot{width:12px;height:12px;border-radius:50%;flex:none}
+.dot.on{background:var(--accentMint);border:2.5px solid var(--colBorder)}
+.dot.off{background:transparent;border:2.5px solid var(--inkSub)}
+.os{width:16px;height:16px;flex:none;color:var(--inkSub)}
+.nm{flex:1;min-width:0;display:flex;flex-direction:column}
+.nm b{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nm b.dim{color:var(--inkSub)}
+.nm code{font-size:11px;color:var(--inkSub)}
+.mt{display:flex;align-items:center;gap:5px;flex:none;font-size:11.5px;font-weight:700;color:var(--inkSub);white-space:nowrap}
+.mt svg{width:13px;height:13px}
+.wd{width:9px;height:9px;transform:rotate(45deg);border-radius:2px;background:var(--warnFill);border:1.5px solid var(--colBorder);flex:none}
+.act{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.keys{display:flex;gap:5px;flex:none}
+.pk{height:26px;padding:0 9px;display:inline-flex;align-items:center;gap:5px;border-radius:9px;border:2.5px solid var(--line);background:var(--surface);box-shadow:0 3px 0 var(--lineShadow);font-size:11px;font-weight:800;cursor:pointer}
+.pk svg{width:12px;height:12px}
+.pk.lit{background:linear-gradient(90deg,var(--accentMint),var(--accentCyan));border-color:var(--colBorder);color:var(--colBorder);box-shadow:none;transform:translateY(3px)}
+.fold{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;margin:2px 0 4px;border-radius:10px;border:2px dashed var(--surfaceDivider);font-size:13px;font-weight:800;color:var(--inkSub);width:100%;background:transparent;cursor:pointer}
+.fold svg{width:14px;height:14px;margin-left:auto}
+.sbar{position:absolute;right:2px;top:6px;width:5px;height:120px;border-radius:3px;background:var(--line);opacity:.6}
+.fade{position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(transparent,var(--surface));pointer-events:none}
+.ft{display:flex;align-items:center;gap:10px;margin-top:8px;padding:10px 12px 12px 14px;border-top:2.5px solid var(--surfaceDivider)}
+.ft .k{height:32px;display:inline-flex;align-items:center;gap:7px;padding:0 12px;border-radius:11px;border:2.5px solid var(--line);background:var(--surface);box-shadow:0 3px 0 var(--lineShadow);font-size:12px;font-weight:800;text-decoration:none;color:var(--ink)}
+.ft .k svg{width:14px;height:14px}
+.ft small{margin-left:auto;font-size:11px;font-weight:600;color:var(--inkSub)}
+.msg{display:flex;flex-direction:column;gap:10px;padding:8px 16px 6px}
+.msg p{margin:0;font-size:14px;font-weight:600;line-height:1.45}
+.msg p.s{font-size:12.5px;color:var(--inkSub)}
+.cmd{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:10px;background:var(--surfaceHover)}
+.cmd code{flex:1;font-size:12px}
+.big{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 16px;border-radius:13px;border:3px solid var(--colBorder);background:linear-gradient(90deg,var(--accentMint),var(--accentCyan));box-shadow:inset 0 0 0 3px var(--ringWhite),0 4px 0 var(--lineShadow);color:var(--colBorder);font-size:14px;font-weight:800;cursor:pointer;align-self:flex-start}
+.big svg{width:16px;height:16px}
+.spin{width:12px;height:12px;flex:none;border:2.5px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skel{height:12px;border-radius:6px;background:var(--surfaceDivider)}
+.quiet{padding:10px 16px 4px;font-size:13px;font-weight:600;color:var(--inkSub);line-height:1.45}
+</style>
+</helmet>
+<div class="tp" style="{{vars}}; width: 360px">
+<div class="card" role="dialog" aria-label="Tailscale" style="box-shadow: inset 0 0 0 {{cardRing}} var(--surfaceRing), 0 4px 0 var(--lineShadow)">
+<div class="hd">
+<span class="dia" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="2.6"></circle><circle cx="12" cy="4" r="1.7"></circle><circle cx="19" cy="8" r="1.7"></circle><circle cx="19" cy="16" r="1.7"></circle><circle cx="12" cy="20" r="1.7"></circle><circle cx="5" cy="16" r="1.7"></circle><circle cx="5" cy="8" r="1.7"></circle><path d="M12 9.4V5.7M14.3 10.7l3.2-1.8M14.3 13.3l3.2 1.8M12 14.6v3.7M9.7 13.3l-3.2 1.8M9.7 10.7L6.5 8.9"></path></svg></span>
+<span><b>Tailscale</b><small>{{tailnet}}</small></span>
+<span class="st {{stCls}}"><sc-if value="{{starting}}" hint-placeholder-val="{{ false }}"><span class="spin" aria-hidden="true"></span></sc-if><sc-if value="{{notStarting}}" hint-placeholder-val="{{ true }}"><i aria-hidden="true"></i></sc-if>{{stText}}</span>
+</div>
+
+<sc-if value="{{showMe}}" hint-placeholder-val="{{ true }}">
+<div class="me">
+<div class="t"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg>deskbox<span class="tag">this machine</span></div>
+<div class="cp"><code>100.71.8.4</code><button class="ck" aria-label="Copy 100.71.8.4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg></button></div>
+<div class="cp"><code>deskbox.tail1234.ts.net</code><button class="ck" aria-label="Copy deskbox.tail1234.ts.net"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg></button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{showList}}" hint-placeholder-val="{{ true }}">
+<div class="sec" role="status">Devices<span>·</span><b>{{countText}}</b></div>
+<div class="list" style="max-height: {{listMax}}">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<button class="row {{r.cls}}" aria-label="{{r.label}}">
+<span class="dot {{r.dot}}" role="img" aria-label="{{r.stateWord}}"></span>
+<svg class="os" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.os}}"></path></svg>
+<span class="nm"><b class="{{r.nameCls}}">{{r.name}}</b><code>{{r.ip}}</code></span>
+<sc-if value="{{r.hov}}" hint-placeholder-val="{{ false }}">
+<span class="keys"><span class="pk {{r.ipKey}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.ipIcon}}"></path></svg>{{r.ipLabel}}</span><span class="pk">DNS</span></span>
+</sc-if>
+<sc-if value="{{r.notHov}}" hint-placeholder-val="{{ true }}">
+<span class="mt">
+<sc-if value="{{r.warn}}" hint-placeholder-val="{{ false }}"><span class="wd" aria-hidden="true"></span></sc-if>
+<sc-if value="{{r.active}}" hint-placeholder-val="{{ false }}"><svg class="act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="traffic flowing" role="img"><path d="M8 4v14M4 8l4-4 4 4M16 20V6M12 16l4 4 4-4"></path></svg></sc-if>
+<sc-if value="{{r.relay}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h4l3-6 2 12 3-6h4"></path></svg></sc-if>
+{{r.meta}}
+</span>
+</sc-if>
+</button>
+</sc-for>
+<sc-if value="{{showFold}}" hint-placeholder-val="{{ false }}"><button class="fold" aria-expanded="false"><span class="dot off" aria-hidden="true"></span>{{foldText}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button></sc-if>
+<sc-if value="{{scrolls}}" hint-placeholder-val="{{ false }}"><span class="sbar" aria-hidden="true"></span><span class="fade" aria-hidden="true"></span></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isAlone}}" hint-placeholder-val="{{ false }}">
+<div class="sec">Devices<span>·</span><b>just this one</b></div>
+<p class="quiet" style="margin: 0">No other devices on this tailnet yet. Sign in to Tailscale on another one and it shows up here.</p>
+</sc-if>
+
+<sc-if value="{{isStopped}}" hint-placeholder-val="{{ false }}">
+<div class="msg">
+<p>Tailscale is off on this machine.</p>
+<p class="s">It's signed in, just not connected. Turning it on needs root, so it's a command for now:</p>
+<div class="cmd"><code>tailscale up</code><button class="ck" aria-label="Copy the command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg></button></div>
+<p class="s">Your devices show here again once it's on.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{isLogin}}" hint-placeholder-val="{{ false }}">
+<div class="msg">
+<p>This machine is signed out of Tailscale.</p>
+<p class="s">Sign in to see your devices. It opens Tailscale's sign-in page in your browser.</p>
+<button class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg>Sign in</button>
+</div>
+</sc-if>
+
+<sc-if value="{{isNoDaemon}}" hint-placeholder-val="{{ false }}">
+<div class="msg">
+<p>tailscaled isn't running.</p>
+<p class="s">The <code>tailscale</code> command is here, but the service it talks to is stopped. Start it, and keep it on after a restart, with:</p>
+<div class="cmd"><code>sudo systemctl enable --now tailscaled</code><button class="ck" aria-label="Copy the command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg></button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{isStarting}}" hint-placeholder-val="{{ false }}">
+<div class="sec">Devices<span>·</span><b>connecting…</b></div>
+<div style="display: flex; flex-direction: column; gap: 18px; padding: 10px 18px 8px" aria-hidden="true">
+<div style="display: flex; gap: 12px; align-items: center"><span class="dot off"></span><span class="skel" style="width: 130px"></span></div>
+<div style="display: flex; gap: 12px; align-items: center"><span class="dot off"></span><span class="skel" style="width: 96px"></span></div>
+<div style="display: flex; gap: 12px; align-items: center"><span class="dot off"></span><span class="skel" style="width: 150px"></span></div>
+</div>
+</sc-if>
+
+<div class="ft">
+<a class="k" href="https://login.tailscale.com/admin/machines"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg>Admin console</a>
+<small>{{footer}}</small>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"state":{"editor":"enum","options":["normal","hover","big","allup","alone","stopped","login","nodaemon","starting"],"default":"normal","section":"State"},"mode":{"editor":"enum","options":["light","dark","darker"],"default":"light","section":"Theme"},"group":{"editor":"enum","options":["vs","nightcord","mmj","matugen"],"default":"vs","section":"Theme"},"$preview":{"width":360,"height":640}}'>
+class Component extends DCLogic {
+  roles(group, mode) {
+    const G = {
+      vs: { border: '#555473', A: '#04feee', B: '#00ffcb', deep: '#232235', divider: '#e4e4ec' },
+      nightcord: { border: '#43285f', A: '#c08cf2', B: '#e2b5ff', deep: '#2b1a3d', divider: '#e8dff1' },
+      mmj: { border: '#39662d', A: '#a4ee55', B: '#7fe9a8', deep: '#223c1b', divider: '#e3f1df' },
+      matugen: { border: '#7d1d4f', A: '#ffb0cf', B: '#ffb68e', deep: '#4a0e2c', divider: '#f4dde5' }
+    };
+    const p = G[group] || G.vs;
+    const h = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+    const x = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+    const mix = (a, b, t) => { const A = h(a), B = h(b); return x(A.map((v, i) => v * (1 - t) + B[i] * t)); };
+    const dk = (c, f) => x(h(c).map(v => v / f));
+    const lt = (c, f) => x(h(c).map(v => v * f));
+    const W = '#ffffff';
+    let t;
+    if (mode === 'darker') {
+      const s = dk(p.deep, 1.4);
+      t = { surface: s, surfaceHover: lt(s, 1.35), surfaceDivider: lt(s, 1.75), ringWhite: lt(s, 2), surfaceRing: lt(s, 1.6), line: dk(p.border, 1.35), lineShadow: dk(p.border, 1.8), ink: p.divider, chipFill: dk(p.border, 1.35), chipInk: W };
+    } else if (mode === 'dark') {
+      const s = lt(p.deep, 1.18);
+      t = { surface: s, surfaceHover: lt(s, 1.35), surfaceDivider: lt(s, 1.75), ringWhite: mix(W, p.border, 0.08), surfaceRing: mix(W, p.border, 0.18), line: p.border, lineShadow: dk(p.border, 1.3), ink: p.divider, chipFill: p.border, chipInk: W };
+    } else {
+      t = { surface: W, surfaceHover: '#f2f2f2', surfaceDivider: p.divider, ringWhite: W, surfaceRing: '#d9d9d9', line: mix(W, p.border, 0.42), lineShadow: mix(W, p.border, 0.30), ink: p.border, chipFill: mix(W, p.border, 0.14), chipInk: p.border };
+    }
+    t.inkSub = t.ink + 'aa';
+    Object.assign(t, { accentCyan: p.A, accentMint: p.B, colBorder: p.border, warnFill: '#ffb74d' });
+    return Object.keys(t).map(k => '--' + k + ': ' + t[k]).join('; ');
+  }
+  renderVals() {
+    const state = this.props.state ?? 'normal';
+    const mode = this.props.mode ?? 'light';
+    const OS = {
+      linux: 'M4 5h16v14H4zM7.5 10l2.5 2-2.5 2M12 15h4',
+      android: 'M7 3h10v18H7zM11 18h2',
+      windows: 'M4 5h16v14H4zM4 12h16M12 5v14',
+      macos: 'M5 6h14v9H5zM3 18h18'
+    };
+    const R = (name, os, ip, o) => {
+      const e = o || {};
+      return {
+        name: name, ip: ip, os: OS[os],
+        dot: e.off ? 'off' : 'on', stateWord: e.off ? 'offline' : 'online',
+        nameCls: e.off ? 'dim' : '',
+        warn: !!e.warn, active: !!e.active, relay: !!e.relay,
+        meta: e.meta || '',
+        hov: !!e.hov, notHov: !e.hov, cls: e.hov ? 'hov' : '',
+        ipKey: e.copied ? 'lit' : '', ipLabel: e.copied ? 'Copied' : 'IP',
+        ipIcon: e.copied ? 'M5 12.5l4.5 4.5L19 7.5' : 'M8 8h12v12H8zM16 8V4H4v12h4',
+        label: name + ', ' + (e.off ? 'offline' : 'online') + ', click to copy ' + ip
+      };
+    };
+    const hover = state === 'hover';
+    const normal = [
+      R('fold-phone', 'android', '100.88.20.17'),
+      R('pad5', 'android', '100.102.4.33', { warn: true, meta: 'key ends in 3 days' }),
+      R('steamdeck', 'linux', '100.64.51.9', { active: true, relay: true, meta: 'via relay fra', hov: hover, copied: hover }),
+      R('tab-s6', 'android', '100.91.7.62'),
+      R('vps', 'linux', '100.70.0.1', { meta: 'offers exit node' }),
+      R('old-tablet', 'android', '100.99.12.5', { off: true, meta: '2 h ago' })
+    ];
+    let rows = normal, count = '5 of 6 online', fold = false, foldText = '', scrolls = false, listMax = 'none';
+    if (state === 'allup') {
+      rows = normal.slice(0, 5).concat([R('old-tablet', 'android', '100.99.12.5', { meta: 'back 1 min ago' })]);
+      count = 'all 6 online';
+    }
+    if (state === 'big') {
+      const on = ['akane-desk', 'build-runner-01', 'fold-phone', 'guilherme-work-laptop-2024', 'homeassistant', 'jellyfin-box', 'mac-mini-studio', 'nas', 'pad5', 'pihole', 'printer-pi', 'raspberrypi-garage-camera', 'steamdeck', 'tab-s6', 'vps', 'vps-backup-sao-paulo', 'windows-gaming-rig', 'work-phone'];
+      const os = { 'mac-mini-studio': 'macos', 'windows-gaming-rig': 'windows', 'guilherme-work-laptop-2024': 'windows', 'fold-phone': 'android', 'pad5': 'android', 'tab-s6': 'android', 'work-phone': 'android' };
+      rows = on.map((n, i) => R(n, os[n] || 'linux', '100.' + (64 + i * 3) + '.' + (10 + i) + '.' + (2 + i * 7), n === 'pad5' ? { warn: true, meta: 'key ends in 3 days' } : (n === 'steamdeck' ? { relay: true, meta: 'via relay fra' } : (n === 'vps' ? { meta: 'exit node' } : {}))));
+      count = '18 of 25 online';
+      fold = true; foldText = 'Offline · 7'; scrolls = true; listMax = '424px';
+    }
+    const off = state === 'stopped' || state === 'login' || state === 'nodaemon';
+    const st = {
+      stopped: ['off', 'Off'], login: ['off', 'Signed out'], nodaemon: ['off', 'Not running'], starting: ['', 'Connecting']
+    }[state] || ['on', 'Connected'];
+    return {
+      vars: this.roles(this.props.group ?? 'vs', mode),
+      cardRing: mode === 'light' ? '0px' : '3px',
+      tailnet: state === 'login' || state === 'nodaemon' ? 'no tailnet' : 'masshiro@github',
+      stCls: st[0], stText: st[1],
+      starting: state === 'starting', notStarting: state !== 'starting',
+      showMe: !off && state !== 'starting',
+      showList: ['normal', 'hover', 'big', 'allup'].indexOf(state) >= 0,
+      isAlone: state === 'alone', isStopped: state === 'stopped', isLogin: state === 'login', isNoDaemon: state === 'nodaemon', isStarting: state === 'starting',
+      countText: count, rows: rows, showFold: fold, foldText: foldText, scrolls: scrolls, listMax: listMax,
+      footer: off ? 'checked 2 s ago' : (state === 'starting' ? 'asking tailscaled…' : 'checked 2 s ago')
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale desktop widget</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+.tc{display:inline-block;font-family:'Google Sans Flex','Google Sans','Nunito',system-ui,sans-serif;color:var(--pInk);-webkit-font-smoothing:antialiased;padding:0 5px 5px 0}
+.tc *{box-sizing:border-box}
+.tc button{font:inherit;color:inherit;padding:0}
+.frame{border:3px solid var(--pLine);border-radius:13px;background:var(--pSurface);padding:14px;box-shadow:inset 0 0 0 4px var(--pSurfaceRing),5px 4px 0 var(--pLineShadow)}
+.hd{display:flex;align-items:center;gap:11px;padding:2px 4px 10px}
+.dia{width:28px;height:28px;display:grid;place-items:center;border-radius:8px;background:var(--pSurfaceDivider);border:2.5px solid var(--pLine);transform:rotate(45deg);flex:none}
+.dia svg{width:16px;height:16px;transform:rotate(-45deg)}
+.hd b{display:block;font-size:16px;font-weight:800;line-height:1.15}
+.hd small{display:block;font-size:12px;font-weight:600;color:var(--pInkSub)}
+.st{margin-left:auto;height:26px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border-radius:13px;border:2.5px solid var(--colBorder);background:linear-gradient(90deg,var(--accentMint),var(--accentCyan));color:var(--colBorder);font-size:11.5px;font-weight:800}
+.st i{width:8px;height:8px;border-radius:50%;background:var(--colBorder)}
+.row{display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border-radius:10px;width:100%;border:0;background:var(--pSurfaceHover);text-align:left;cursor:pointer;margin-top:4px}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
+.dot.on{background:var(--accentMint);border:2.5px solid var(--colBorder)}
+.dot.off{border:2.5px solid var(--pInkSub)}
+.os{width:15px;height:15px;flex:none;color:var(--pInkSub)}
+.nm{flex:1;min-width:0;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nm.dim{color:var(--pInkSub)}
+.mt{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--pInkSub);white-space:nowrap}
+.wd{width:8px;height:8px;transform:rotate(45deg);border-radius:2px;background:var(--warnFill);border:1.5px solid var(--colBorder)}
+.cmp{width:148px;height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.cmp .n{font-size:36px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.cmp .dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:120px}
+.cmp small{font-size:11.5px;font-weight:700;color:var(--pInkSub)}
+</style>
+</helmet>
+<div class="tc" style="{{vars}}">
+<sc-if value="{{full}}" hint-placeholder-val="{{ true }}">
+<div class="frame" style="width: 374px">
+<div class="hd">
+<span class="dia" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="2.6"></circle><circle cx="12" cy="4" r="1.7"></circle><circle cx="19" cy="8" r="1.7"></circle><circle cx="19" cy="16" r="1.7"></circle><circle cx="12" cy="20" r="1.7"></circle><circle cx="5" cy="16" r="1.7"></circle><circle cx="5" cy="8" r="1.7"></circle><path d="M12 9.4V5.7M14.3 10.7l3.2-1.8M14.3 13.3l3.2 1.8M12 14.6v3.7M9.7 13.3l-3.2 1.8M9.7 10.7L6.5 8.9"></path></svg></span>
+<span><b>Tailscale</b><small>deskbox · 5 of 6 online</small></span>
+<span class="st"><i aria-hidden="true"></i>On</span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<button class="row" aria-label="{{r.label}}">
+<span class="dot {{r.dot}}" role="img" aria-label="{{r.word}}"></span>
+<svg class="os" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.os}}"></path></svg>
+<span class="nm {{r.nmCls}}">{{r.name}}</span>
+<span class="mt"><sc-if value="{{r.warn}}" hint-placeholder-val="{{ false }}"><span class="wd" aria-hidden="true"></span></sc-if>{{r.meta}}</span>
+</button>
+</sc-for>
+<div style="height: 8px"></div>
+</div>
+</sc-if>
+<sc-if value="{{compact}}" hint-placeholder-val="{{ false }}">
+<div class="frame" style="width: 182px; height: 182px; padding: 14px">
+<div class="cmp" role="img" aria-label="Tailscale: on, 5 of 6 devices online">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2.6"></circle><circle cx="12" cy="4" r="1.7"></circle><circle cx="19" cy="8" r="1.7"></circle><circle cx="19" cy="16" r="1.7"></circle><circle cx="12" cy="20" r="1.7"></circle><circle cx="5" cy="16" r="1.7"></circle><circle cx="5" cy="8" r="1.7"></circle><path d="M12 9.4V5.7M14.3 10.7l3.2-1.8M14.3 13.3l3.2 1.8M12 14.6v3.7M9.7 13.3l-3.2 1.8M9.7 10.7L6.5 8.9"></path></svg>
+<span class="n">5/6</span>
+<span class="dots" aria-hidden="true"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot off"></span></span>
+<small>deskbox · on</small>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"look":{"editor":"enum","options":["full","compact"],"default":"full","section":"State"},"mode":{"editor":"enum","options":["light","dark","darker"],"default":"light","section":"Theme"},"group":{"editor":"enum","options":["vs","nightcord","mmj","matugen"],"default":"vs","section":"Theme"},"$preview":{"width":380,"height":380}}'>
+class Component extends DCLogic {
+  roles(group, mode) {
+    const G = {
+      vs: { border: '#555473', A: '#04feee', B: '#00ffcb', deep: '#232235', divider: '#e4e4ec' },
+      nightcord: { border: '#43285f', A: '#c08cf2', B: '#e2b5ff', deep: '#2b1a3d', divider: '#e8dff1' },
+      mmj: { border: '#39662d', A: '#a4ee55', B: '#7fe9a8', deep: '#223c1b', divider: '#e3f1df' },
+      matugen: { border: '#7d1d4f', A: '#ffb0cf', B: '#ffb68e', deep: '#4a0e2c', divider: '#f4dde5' }
+    };
+    const p = G[group] || G.vs;
+    const h = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+    const x = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+    const mix = (a, b, t) => { const A = h(a), B = h(b); return x(A.map((v, i) => v * (1 - t) + B[i] * t)); };
+    const dk = (c, f) => x(h(c).map(v => v / f));
+    const lt = (c, f) => x(h(c).map(v => v * f));
+    const W = '#ffffff';
+    let t;
+    if (mode === 'darker') {
+      const s = dk(p.deep, 1.4);
+      t = { pSurface: s, pSurfaceHover: lt(s, 1.35), pSurfaceDivider: lt(s, 1.75), pSurfaceRing: lt(s, 1.6), pLine: dk(p.border, 1.35), pLineShadow: dk(p.border, 1.8), pInk: p.divider };
+    } else if (mode === 'dark') {
+      t = { pSurface: W, pSurfaceHover: '#f2f2f2', pSurfaceDivider: p.divider, pSurfaceRing: '#d9d9d9', pLine: p.border, pLineShadow: p.border, pInk: p.border };
+    } else {
+      t = { pSurface: W, pSurfaceHover: '#f2f2f2', pSurfaceDivider: p.divider, pSurfaceRing: '#d9d9d9', pLine: mix(W, p.border, 0.42), pLineShadow: mix(W, p.border, 0.30), pInk: p.border };
+    }
+    t.pInkSub = t.pInk + 'aa';
+    Object.assign(t, { accentCyan: p.A, accentMint: p.B, colBorder: p.border, warnFill: '#ffb74d' });
+    return Object.keys(t).map(k => '--' + k + ': ' + t[k]).join('; ');
+  }
+  renderVals() {
+    const OS = { linux: 'M4 5h16v14H4zM7.5 10l2.5 2-2.5 2M12 15h4', android: 'M7 3h10v18H7zM11 18h2' };
+    const R = (name, os, meta, off, warn) => ({ name: name, os: OS[os], meta: meta || '', dot: off ? 'off' : 'on', word: off ? 'offline' : 'online', nmCls: off ? 'dim' : '', warn: !!warn, label: name + ', click to copy its IP' });
+    const look = this.props.look ?? 'full';
+    return {
+      vars: this.roles(this.props.group ?? 'vs', this.props.mode ?? 'light'),
+      full: look === 'full', compact: look === 'compact',
+      rows: [R('fold-phone', 'android'), R('pad5', 'android', 'key 3 days', false, true), R('steamdeck', 'linux', 'via relay fra'), R('tab-s6', 'android'), R('vps', 'linux', 'exit node'), R('old-tablet', 'android', '2 h ago', true)]
+    };
+  }
+}
+</script>
+</body>
+</html>

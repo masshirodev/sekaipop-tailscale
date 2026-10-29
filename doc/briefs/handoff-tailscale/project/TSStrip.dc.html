@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bar with the Tailscale entry</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+.bs{font-family:'Google Sans Flex','Google Sans','Nunito',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:var(--ink)}
+.bs *{box-sizing:border-box}
+.bar{height:63px;display:flex;align-items:center;gap:10px;padding:0 14px;border:3px solid var(--line);border-radius:22px;background:var(--surface)}
+.p{height:36px;display:inline-flex;align-items:center;gap:7px;padding:0 14px;border:3px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:inset 0 0 0 5px var(--ringWhite),0 4px 0 var(--lineShadow);font-size:12px;font-weight:800;white-space:nowrap;flex:none}
+.p svg{width:17px;height:17px;flex:none}
+.p.chip{background:var(--chipFill);color:var(--chipInk)}
+.wsb{width:30px;height:30px;display:grid;place-items:center;border:3px solid var(--line);border-radius:15px;color:var(--colBorder);font-size:12px;font-weight:800;box-shadow:0 4px 0 var(--lineShadow)}
+.av{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);margin-left:-8px}
+.av:first-child{margin-left:0}
+.badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--accentMint);border:2px solid var(--colBorder);color:var(--colBorder);font-size:10px;font-weight:800;display:grid;place-items:center}
+</style>
+</helmet>
+<div class="bs" style="{{vars}}; width: 1240px; padding: 14px 16px 18px; background: {{wall}}; border-radius: 20px">
+<div class="bar" style="box-shadow: inset 0 0 0 4px var(--surfaceRing), 0 4px 0 var(--lineShadow)">
+<span class="wsb" style="background: #8ee3ef">1</span><span class="wsb" style="background: #ff9ecb">2</span><span class="wsb" style="background: var(--surface); color: var(--ink)">3</span>
+<span class="p" style="margin-left: 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M3 9h18"></path></svg>Firefox</span>
+<span style="flex: 1"></span>
+<span class="p"><span style="display: flex"><span class="av" style="background: #b39ddb"></span><span class="av" style="background: #8ee3ef"></span><span class="av" style="background: #ffe066"></span></span>General · 3</span>
+<span class="p chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"></path></svg>28°C</span>
+<dc-import name="TSEntry" state="{{state}}" mode="{{mode}}" group="{{group}}" look="{{look}}" open="{{open}}" hint-size="80px,44px"></dc-import>
+<span class="p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg><span class="badge">4</span></span>
+<span class="p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0M12 19.5h.01"></path></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10-5 4V3l5 4L7 17"></path></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6"></path></svg></span>
+<span class="p chip">05:58 PM</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"state":{"editor":"enum","options":["running","attn","allup","stopped","login","starting","nodaemon"],"default":"attn","section":"State"},"look":{"editor":"enum","options":["count","icon"],"default":"count","section":"State"},"open":{"editor":"boolean","default":false,"section":"State"},"mode":{"editor":"enum","options":["light","dark","darker"],"default":"light","section":"Theme"},"group":{"editor":"enum","options":["vs","nightcord","mmj","matugen"],"default":"vs","section":"Theme"},"$preview":{"width":1240,"height":95}}'>
+class Component extends DCLogic {
+  roles(group, mode) {
+    const G = {
+      vs: { border: '#555473', A: '#04feee', B: '#00ffcb', deep: '#232235', divider: '#e4e4ec' },
+      nightcord: { border: '#43285f', A: '#c08cf2', B: '#e2b5ff', deep: '#2b1a3d', divider: '#e8dff1' },
+      mmj: { border: '#39662d', A: '#a4ee55', B: '#7fe9a8', deep: '#223c1b', divider: '#e3f1df' },
+      matugen: { border: '#7d1d4f', A: '#ffb0cf', B: '#ffb68e', deep: '#4a0e2c', divider: '#f4dde5' }
+    };
+    const p = G[group] || G.vs;
+    const h = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+    const x = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+    const mix = (a, b, t) => { const A = h(a), B = h(b); return x(A.map((v, i) => v * (1 - t) + B[i] * t)); };
+    const dk = (c, f) => x(h(c).map(v => v / f));
+    const lt = (c, f) => x(h(c).map(v => v * f));
+    const W = '#ffffff';
+    let t;
+    if (mode === 'darker') {
+      const s = dk(p.deep, 1.4);
+      t = { surface: s, ringWhite: lt(s, 2), surfaceRing: lt(s, 1.6), line: dk(p.border, 1.35), lineShadow: dk(p.border, 1.8), ink: p.divider, chipFill: dk(p.border, 1.35), chipInk: W };
+    } else if (mode === 'dark') {
+      const s = lt(p.deep, 1.18);
+      t = { surface: s, ringWhite: mix(W, p.border, 0.08), surfaceRing: mix(W, p.border, 0.18), line: p.border, lineShadow: dk(p.border, 1.3), ink: p.divider, chipFill: p.border, chipInk: W };
+    } else {
+      t = { surface: W, ringWhite: W, surfaceRing: '#d9d9d9', line: mix(W, p.border, 0.42), lineShadow: mix(W, p.border, 0.30), ink: p.border, chipFill: mix(W, p.border, 0.14), chipInk: p.border };
+    }
+    Object.assign(t, { accentCyan: p.A, accentMint: p.B, colBorder: p.border });
+    return Object.keys(t).map(k => '--' + k + ': ' + t[k]).join('; ');
+  }
+  renderVals() {
+    const mode = this.props.mode ?? 'light';
+    return {
+      vars: this.roles(this.props.group ?? 'vs', mode),
+      wall: mode === 'light' ? 'linear-gradient(120deg, #e8f4f7, #cfd3ea)' : 'linear-gradient(120deg, #2a2c46, #151524)',
+      state: this.props.state ?? 'attn', mode: mode, group: this.props.group ?? 'vs',
+      look: this.props.look ?? 'count', open: this.props.open ?? false
+    };
+  }
+}
+</script>
+</body>
+</html>

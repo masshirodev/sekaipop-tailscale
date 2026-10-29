@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tailscale bar entry: states and modes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..1000&amp;family=Nunito:wght@600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+.cap{font-size:13px;font-weight:700;color:#555473}
+.lab{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#555473aa}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:96px}
+.vbar{width:74px;padding:14px 0;display:flex;flex-direction:column;align-items:center;gap:12px;border:3px solid;border-radius:22px}
+.vp{width:52px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:2px;border:3px solid;border-radius:18px;font-size:12px;font-weight:800}
+.vp svg{width:18px;height:18px}
+</style>
+</helmet>
+<div style="width: 1600px; height: 1080px; box-sizing: border-box; padding: 40px; background: #eef0f4; font-family: 'Google Sans Flex', 'Google Sans', 'Nunito', system-ui, sans-serif; display: flex; gap: 40px">
+<div style="display: flex; flex-direction: column; gap: 14px; width: 1250px">
+<span class="lab">Next to its neighbours: Discord, Weather, Tailscale, Updates, status, clock</span>
+<dc-import name="TSStrip" mode="light" state="attn" hint-size="1240px,95px"></dc-import>
+<dc-import name="TSStrip" mode="dark" state="attn" hint-size="1240px,95px"></dc-import>
+<dc-import name="TSStrip" mode="darker" state="attn" hint-size="1240px,95px"></dc-import>
+
+<span class="lab" style="margin-top: 26px">The entry's states (Light)</span>
+<div style="display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap">
+<div class="cell"><dc-import name="TSEntry" state="running" hint-size="80px,44px"></dc-import><span class="cap">On, 5 of 6 up</span></div>
+<div class="cell"><dc-import name="TSEntry" state="attn" hint-size="80px,44px"></dc-import><span class="cap">A key ends soon</span></div>
+<div class="cell"><dc-import name="TSEntry" state="allup" hint-size="80px,44px"></dc-import><span class="cap">All up</span></div>
+<div class="cell"><dc-import name="TSEntry" state="stopped" hint-size="80px,44px"></dc-import><span class="cap">Tailscale off</span></div>
+<div class="cell"><dc-import name="TSEntry" state="login" hint-size="100px,44px"></dc-import><span class="cap">Signed out</span></div>
+<div class="cell"><dc-import name="TSEntry" state="starting" hint-size="80px,44px"></dc-import><span class="cap">Connecting</span></div>
+<div class="cell"><dc-import name="TSEntry" state="nodaemon" hint-size="60px,44px"></dc-import><span class="cap">No tailscaled</span></div>
+<div class="cell"><dc-import name="TSEntry" state="running" open="{{ true }}" hint-size="80px,44px"></dc-import><span class="cap">Popup open</span></div>
+</div>
+<span class="lab" style="margin-top: 8px">Icon only (a setting): the dot says this machine's state</span>
+<div style="display: flex; gap: 14px; align-items: flex-end">
+<div class="cell"><dc-import name="TSEntry" state="running" look="icon" hint-size="50px,44px"></dc-import><span class="cap">On</span></div>
+<div class="cell"><dc-import name="TSEntry" state="attn" look="icon" hint-size="50px,44px"></dc-import><span class="cap">Attention</span></div>
+<div class="cell"><dc-import name="TSEntry" state="stopped" look="icon" hint-size="50px,44px"></dc-import><span class="cap">Off</span></div>
+<div class="cell"><dc-import name="TSEntry" state="nodaemon" look="icon" hint-size="50px,44px"></dc-import><span class="cap">No tailscaled</span></div>
+</div>
+
+<span class="lab" style="margin-top: 26px">The same states, Darker</span>
+<div style="display: flex; gap: 14px; align-items: flex-end; padding: 18px 20px; border-radius: 18px; background: #111019">
+<div class="cell"><dc-import name="TSEntry" state="running" mode="darker" hint-size="80px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">On</span></div>
+<div class="cell"><dc-import name="TSEntry" state="attn" mode="darker" hint-size="80px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">Attention</span></div>
+<div class="cell"><dc-import name="TSEntry" state="stopped" mode="darker" hint-size="80px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">Off</span></div>
+<div class="cell"><dc-import name="TSEntry" state="login" mode="darker" hint-size="100px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">Signed out</span></div>
+<div class="cell"><dc-import name="TSEntry" state="starting" mode="darker" hint-size="80px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">Connecting</span></div>
+<div class="cell"><dc-import name="TSEntry" state="nodaemon" mode="darker" hint-size="60px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">No tailscaled</span></div>
+<div class="cell"><dc-import name="TSEntry" state="running" mode="darker" group="matugen" hint-size="80px,44px"></dc-import><span class="cap" style="color: #e4e4ecaa">Matugen</span></div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="lab">Standing bar</span>
+<div style="display: flex; gap: 28px">
+<div class="vbar" style="background: #ffffff; border-color: #b8b7c4; box-shadow: inset 0 0 0 4px #d9d9d9, 4px 0 0 #ccccd5; color: #555473">
+<span class="vp" style="background: #e7e7eb; border-color: #b8b7c4; box-shadow: inset 0 0 0 5px #ffffff, 0 4px 0 #ccccd5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"></path></svg>28°</span>
+<dc-import name="TSEntry" state="attn" vertical="{{ true }}" hint-size="56px,62px"></dc-import>
+<dc-import name="TSEntry" state="stopped" vertical="{{ true }}" hint-size="56px,62px"></dc-import>
+<dc-import name="TSEntry" state="login" vertical="{{ true }}" hint-size="56px,62px"></dc-import>
+<span class="vp" style="background: #e7e7eb; border-color: #b8b7c4; box-shadow: inset 0 0 0 5px #ffffff, 0 4px 0 #ccccd5; line-height: 1.05">05<br>58</span>
+</div>
+<div class="vbar" style="background: #191826; border-color: #3f3e55; box-shadow: inset 0 0 0 4px #28273d, 4px 0 0 #2f2f40; color: #e4e4ec">
+<span class="vp" style="background: #3f3e55; color: #ffffff; border-color: #3f3e55; box-shadow: inset 0 0 0 5px #32314c, 0 4px 0 #2f2f40"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"></path></svg>28°</span>
+<dc-import name="TSEntry" state="running" vertical="{{ true }}" mode="darker" hint-size="56px,62px"></dc-import>
+<dc-import name="TSEntry" state="starting" vertical="{{ true }}" mode="darker" hint-size="56px,62px"></dc-import>
+<dc-import name="TSEntry" state="running" look="icon" vertical="{{ true }}" mode="darker" hint-size="56px,44px"></dc-import>
+<span class="vp" style="background: #3f3e55; color: #ffffff; border-color: #3f3e55; box-shadow: inset 0 0 0 5px #32314c, 0 4px 0 #2f2f40; line-height: 1.05">05<br>58</span>
+</div>
+</div>
+<span class="cap" style="max-width: 220px">Icon over the count, like Weather's icon over the temperature. Signed out keeps its words.</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
