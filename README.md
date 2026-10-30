@@ -2,11 +2,11 @@
 
 A [SekaiPop](https://github.com/Blapples/SekaiPop) plugin that shows your Tailscale status:
 
-| Surface            | Shows                                                                                         |
-| ------------------ | --------------------------------------------------------------------------------------------- |
-| **Bar entry**      | whether this machine is on the tailnet (the icon), and how many devices are up (`5/6`)        |
+| Surface            | Shows                                                                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| **Bar entry**      | whether this machine is on the tailnet (the icon), and how many devices are up (`5/6`)                |
 | **Popup**          | a click on the entry: this machine with its IP and MagicDNS name, then every device with a status dot |
-| **Desktop widget** | the same list as a card (or, compact, the count and a dot per device)                         |
+| **Desktop widget** | the same list as a card (or, compact, the count and a dot per device)                                 |
 
 Clicking a device copies its IP; in the popup, hovering it shows IP and DNS keys. A device whose
 key ends within a week gets a small amber diamond, and the bar's icon gets one too. When this
@@ -38,15 +38,15 @@ A keybind for the popup: `qs -c sekaipop ipc call plugins popup tailscale`.
 
 Settings > Desktop > Plugins > Tailscale:
 
-| Group    | Setting                | Default         |                                                      |
-| -------- | ---------------------- | --------------- | ---------------------------------------------------- |
-| Bar      | Bar entry              | Icon and count  | or Icon only (a status dot on the icon)              |
-| Bar      | Hide without Tailscale | on              | off the bar when the `tailscale` command isn't there |
-| Devices  | Count                  | All devices     | or Only mine (devices shared in by others left out)  |
-| Devices  | Offline devices        | Fold            | Show, Fold (more than 3 under one line), Hide        |
-| Devices  | Order                  | Online first    | By name, Last seen                                   |
-| Widget   | Look                   | Full            | or Compact                                           |
-| Checking | Check every            | 5 seconds       | while the popup or the widget shows; the bar alone checks every 30 s |
+| Group    | Setting                | Default        |                                                                      |
+| -------- | ---------------------- | -------------- | -------------------------------------------------------------------- |
+| Bar      | Bar entry              | Icon and count | or Icon only (a status dot on the icon)                              |
+| Bar      | Hide without Tailscale | on             | off the bar when the `tailscale` command isn't there                 |
+| Devices  | Count                  | All devices    | or Only mine (devices shared in by others left out)                  |
+| Devices  | Offline devices        | Fold           | Show, Fold (more than 3 under one line), Hide                        |
+| Devices  | Order                  | Online first   | By name, Last seen                                                   |
+| Widget   | Look                   | Full           | or Compact                                                           |
+| Checking | Check every            | 5 seconds      | while the popup or the widget shows; the bar alone checks every 30 s |
 
 ## Working on it
 
@@ -55,3 +55,8 @@ Settings > Desktop > Plugins > Tailscale:
 - `scripts/test.sh` runs its tests with the 95 % coverage floor.
 - `doc/DESIGN.md` is how the design became the plugin, where it departs from it, and how to check
   the QML; `doc/briefs/` holds the brief and the handoff.
+
+## License
+
+MIT, copyright masshirodev; see [LICENSE](./LICENSE). SekaiPop itself is GPL-3.0;
+this plugin is a separate set of files it loads, and MIT is compatible with it.
